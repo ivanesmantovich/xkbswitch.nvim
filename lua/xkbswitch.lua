@@ -1,22 +1,31 @@
 local M = {}
-
 -- nvim_create_autocmd shortcut
 local autocmd = vim.api.nvim_create_autocmd
 
+
 local xkb_switch_lib = nil
-local all_libs_locations = vim.fn.systemlist('ldd $(which xkb-switch)')
--- Find the path to the xkbswitch shared object
-for _, value in ipairs(all_libs_locations) do
-    if string.find(value, 'libxkbswitch.so.1') then
-        if string.find(value, 'not found') then
-            error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
-        else
-            xkb_switch_lib = string.sub(
-                value, string.find(value, "/"), string.find(value, "%(") - 2
-            )
+
+-- Find the path to the xkbswitch shared object (macOS)
+if vim.loop.os_uname().sysname == 'Darwin' then
+  xkb_switch_lib = '/usr/local/lib/libInputSourceSwitcher.dylib'
+end
+
+-- Find the path to the xkbswitch shared object (Linux)
+if xkb_switch_lib == nil then
+    local all_libs_locations = vim.fn.systemlist('ldd $(which xkb-switch)')
+    for _, value in ipairs(all_libs_locations) do
+        if string.find(value, 'libxkbswitch.so.1') then
+            if string.find(value, 'not found') then
+                error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
+            else
+                xkb_switch_lib = string.sub(
+                    value, string.find(value, "/"), string.find(value, "%(") - 2
+                )
+            end
         end
     end
 end
+
 if xkb_switch_lib == nil then
     error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
 end
@@ -40,6 +49,7 @@ end
 if user_us_layout_variation == nil then
     error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l)")
 end
+
 
 function M.setup()
     -- When leaving insert mode:
@@ -105,5 +115,6 @@ function M.setup()
         }
     )
 end
+
 
 return M
