@@ -3,13 +3,24 @@ local M = {}
 -- nvim_create_autocmd shortcut
 local autocmd = vim.api.nvim_create_autocmd
 
-local xkb_switch_lib
--- Path to the shared object
-if vim.fn.filereadable('/usr/local/lib/libxkbswitch.so') == 1 then
-    xkb_switch_lib = "/usr/local/lib/libxkbswitch.so"
-else
-    error("(xkbswitch.lua) Error occured: no file found at /usr/local/lib/libxkbswitch.so")
+local xkb_switch_lib = nil
+local all_libs_locations = vim.fn.systemlist('ldd $(which xkb-switch)')
+-- Find the path to the xkbswitch shared object
+for _, value in ipairs(all_libs_locations) do
+    if string.find(value, 'libxkbswitch.so.1') then
+        if string.find(value, 'not found') then
+            error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
+        else
+            xkb_switch_lib = string.sub(
+                value, string.find(value, "/"), string.find(value, "%(") - 2
+            )
+        end
+    end
 end
+if xkb_switch_lib == nil then
+    error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
+end
+
 
 local function get_current_layout()
     return vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_getXkbLayout', '')
