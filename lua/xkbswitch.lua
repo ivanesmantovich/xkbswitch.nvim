@@ -70,7 +70,7 @@ function M.setup()
 
     -- When Neovim gets focus:
     -- 1. Save the current layout
-    -- 2. Switch to the US layout IF Normal mode is the current mode
+    -- 2. Switch to the US layout if Normal mode or Visual mode is the current mode
     autocmd(
         'FocusGained',
         {
@@ -78,8 +78,8 @@ function M.setup()
             callback = function ()
                 vim.schedule(function()
                     saved_layout = get_current_layout()
-                    -- Normal mode check
-                    if vim.api.nvim_get_mode().mode == "n" then
+                    local current_mode = vim.api.nvim_get_mode().mode
+                    if current_mode == "n" or current_mode == "no" or current_mode == "v" or current_mode == "V" or current_mode == "^V" then
                         vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', user_us_layout_variation)
                     end
                 end)
