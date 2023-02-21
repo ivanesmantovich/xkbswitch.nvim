@@ -11,7 +11,7 @@ Plugin saves your actual layout before switching to English. The next time you e
 **It also works with focus.** When Neovim loses focus plugin switches your layout to the last saved one. When Neovim gets focus plugin saves your layout, which you could've changed in another window and switches to English **only if** you need it. ([Logic](#about))\
 Now you need to switch your layout only when you need to type something in a different language! That's the way it always should have been.
 
-## Linux / Unix (X.org)
+## Linux / Unix (X.org / Wayland)
 1. Install package `libxkbfile-dev` (or `libxkbfile-devel` if you use Fedora)
 2. Install [xkb-switch](https://github.com/grwlf/xkb-switch)
 ```
