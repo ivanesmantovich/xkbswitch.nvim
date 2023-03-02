@@ -46,7 +46,7 @@ for _, value in ipairs(user_layouts) do
 end
 
 if user_us_layout_variation == nil then
-    error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l)")
+    error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l / issw -l)")
 end
 
 
