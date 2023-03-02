@@ -2,16 +2,15 @@ local M = {}
 -- nvim_create_autocmd shortcut
 local autocmd = vim.api.nvim_create_autocmd
 
-
 local xkb_switch_lib = nil
+local user_os_name = vim.loop.os_uname().sysname
 
 -- Find the path to the xkbswitch shared object (macOS)
-if vim.loop.os_uname().sysname == 'Darwin' then
-  xkb_switch_lib = '/usr/local/lib/libInputSourceSwitcher.dylib'
-end
-
+if user_os_name == 'Darwin' then
+    if vim.fn.filereadable('/usr/local/lib/libInputSourceSwitcher.dylib') then xkb_switch_lib = '/usr/local/lib/libInputSourceSwitcher.dylib'
+    elseif vim.fn.filereadable('/usr/lib/libInputSourceSwitcher.dylib') then xkb_switch_lib = '/usr/lib/libInputSourceSwitcher.dylib' end
 -- Find the path to the xkbswitch shared object (Linux)
-if xkb_switch_lib == nil then
+else
     local all_libs_locations = vim.fn.systemlist('ldd $(which xkb-switch)')
     for _, value in ipairs(all_libs_locations) do
         if string.find(value, 'libxkbswitch.so.1') then
@@ -38,10 +37,10 @@ end
 local saved_layout = get_current_layout()
 local user_us_layout_variation = nil
 
-local user_layouts = vim.fn.systemlist('xkb-switch -l')
+local user_layouts = vim.fn.systemlist(user_os_name == 'Darwin' and 'issw -l' or 'xkb-switch -l')
 -- Find the used US layout (us/us(qwerty)/us(dvorak)/...)
 for _, value in ipairs(user_layouts) do
-    if string.find(value, '^us') then
+    if string.find(value, user_os_name == 'Darwin' and 'ABC' or '^us') then
         user_us_layout_variation = value
     end
 end
