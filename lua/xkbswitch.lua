@@ -4,10 +4,13 @@ local autocmd = vim.api.nvim_create_autocmd
 
 
 local xkb_switch_lib = nil
+local en_layout_match = '^us'
 
 -- Find the path to the xkbswitch shared object (macOS)
 if vim.loop.os_uname().sysname == 'Darwin' then
   xkb_switch_lib = '/usr/local/lib/libInputSourceSwitcher.dylib'
+  -- com.apple.keylayout.ABC
+  en_layout_match = 'ABC'
 end
 
 -- Find the path to the xkbswitch shared object (Linux)
@@ -30,7 +33,6 @@ if xkb_switch_lib == nil then
     error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
 end
 
-
 local function get_current_layout()
     return vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_getXkbLayout', '')
 end
@@ -38,20 +40,22 @@ end
 local saved_layout = get_current_layout()
 local user_us_layout_variation = nil
 
-local user_layouts = vim.fn.systemlist('xkb-switch -l')
--- Find the used US layout (us/us(qwerty)/us(dvorak)/...)
-for _, value in ipairs(user_layouts) do
-    if string.find(value, '^us') then
-        user_us_layout_variation = value
+function M.setup(config)
+    local user_layouts_cmd = 'xkb-switch -l'
+    if config then
+        -- it can be `issw -l`, `xkbswitch -l` or any other
+        user_layouts_cmd = config.user_layouts_cmd
     end
-end
-
-if user_us_layout_variation == nil then
-    error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l)")
-end
-
-
-function M.setup()
+    local user_layouts = vim.fn.systemlist(user_layouts_cmd)
+    -- Find the used US layout (us/us(qwerty)/us(dvorak)/...)
+    for _, value in ipairs(user_layouts) do
+        if string.find(value, en_layout_match) then
+            user_us_layout_variation = value
+        end
+    end
+    if user_us_layout_variation == nil then
+        error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (" .. user_layouts_cmd .. ")")
+    end
     -- When leaving insert mode:
     -- 1. Save the current layout
     -- 2. Switch to the US layout
