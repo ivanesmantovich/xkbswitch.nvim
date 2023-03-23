@@ -36,7 +36,35 @@ call dein#add('ivanesmantovich/xkbswitch.nvim')
 ```
 require('xkbswitch').setup()
 ```
-
+## Linux / Unix (Gnome 3 or 4)
+If you are useing Gnome Shell then `xkb-switch` will most likely not work. For that case there is another similar tool - [g3kb-switch](https://github.com/lyokha/g3kb-switch).
+1. Install `libglib2.0-dev` package (or `glib2-devel` if you use Fedora)
+2. Build and install the switcher and the *G3kbSwitch Gnome Shell* extension. For more details see [g3kb-switch](https://github.com/lyokha/g3kb-switch) instructions.
+```bash
+git clone https://github.com/lyokha/g3kb-switch.git
+cd g3kb-switch
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+```
+```bash
+$ cd ../extension
+$ make install  # no sudo required!
+```
+3. Install this plugin
+* Packer
+```
+use 'ivanesmantovich/xkbswitch.nvim'
+```
+* Dein
+```
+call dein#add('ivanesmantovich/xkbswitch.nvim')
+```
+4. Add the setup line to your config
+```
+require('xkbswitch').setup()
+```
 ## macOS
 1. Install [input-source-switcher](https://github.com/vovkasm/input-source-switcher)
 ```
