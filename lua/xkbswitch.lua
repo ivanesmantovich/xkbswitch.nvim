@@ -15,7 +15,7 @@ else
     for _, value in ipairs(all_libs_locations) do
         if string.find(value, 'libxkbswitch.so.1') then
             if string.find(value, 'not found') then
-                error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
+                xkb_switch_lib = nil
             else
                 xkb_switch_lib = string.sub(
                     value, string.find(value, "/"), string.find(value, "%(") - 2
@@ -24,9 +24,12 @@ else
         end
     end
 end
+if xkb_switch_lib == nil then
+   if vim.fn.filereadable('/usr/local/lib/libg3kbswitch.so') then xkb_switch_lib = '/usr/local/lib/libg3kbswitch.so' end
+end
 
 if xkb_switch_lib == nil then
-    error("(xkbswitch.lua) Error occured: libxkbswitch.so.1 was not found.")
+    error("(xkbswitch.lua) Error occured: layout switcher file was not found.")
 end
 
 
@@ -37,7 +40,7 @@ end
 local saved_layout = get_current_layout()
 local user_us_layout_variation = nil
 
-local user_layouts = vim.fn.systemlist(user_os_name == 'Darwin' and 'issw -l' or 'xkb-switch -l')
+local user_layouts = vim.fn.systemlist(string.find(xkb_switch_lib, 'dylib') and 'issw -l' or string.find(xkb_switch_lib, 'xkb') and 'xkb-switch -l' or string.find(xkb_switch_lib, 'g3kb') and 'g3kb-switch -l')
 -- Find the used US layout (us/us(qwerty)/us(dvorak)/...)
 for _, value in ipairs(user_layouts) do
     if string.find(value, user_os_name == 'Darwin' and 'ABC' or '^us') then
@@ -46,9 +49,8 @@ for _, value in ipairs(user_layouts) do
 end
 
 if user_us_layout_variation == nil then
-    error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l / issw -l)")
+    error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l / issw -l / g3kb-switch -l)")
 end
-
 
 function M.setup()
     -- When leaving insert mode:
@@ -114,6 +116,5 @@ function M.setup()
         }
     )
 end
-
 
 return M
