@@ -14,7 +14,7 @@ Now you need to switch your layout only when you need to type something in a dif
 ## Linux / Unix (X.org / Wayland)
 1. Install package `libxkbfile-dev` (or `libxkbfile-devel` if you use Fedora)
 2. Install [xkb-switch](https://github.com/grwlf/xkb-switch)
-```
+```bash
 git clone https://github.com/grwlf/xkb-switch.git
 cd xkb-switch
 mkdir build && cd build
@@ -37,9 +37,37 @@ call dein#add('ivanesmantovich/xkbswitch.nvim')
 require('xkbswitch').setup()
 ```
 
+## GNOME 3 or 4 (g3kb-switch)
+1. Install `libglib2.0-dev` package (or `glib2-devel` if you use Fedora)
+2. Install [g3kb-switch](https://github.com/lyokha/g3kb-switch) and the [extension](https://github.com/lyokha/g3kb-switch#gnome-41-and-newer).
+```bash
+git clone https://github.com/lyokha/g3kb-switch.git
+cd g3kb-switch
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+
+cd ../extension
+make install  # no sudo required!
+```
+3. Install this plugin
+* Packer
+```
+use 'ivanesmantovich/xkbswitch.nvim'
+```
+* Dein
+```
+call dein#add('ivanesmantovich/xkbswitch.nvim')
+```
+4. Add the setup line to your config
+```
+require('xkbswitch').setup()
+```
+
 ## macOS
 1. Install [input-source-switcher](https://github.com/vovkasm/input-source-switcher)
-```
+```bash
 git clone https://github.com/vovkasm/input-source-switcher.git
 cd input-source-switcher
 mkdir build && cd build
