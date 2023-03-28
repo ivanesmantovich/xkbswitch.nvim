@@ -45,7 +45,7 @@ local user_layouts = vim.fn.systemlist(string.find(xkb_switch_lib, 'dylib') and 
 for _, value in ipairs(user_layouts) do
     if string.find(value, user_os_name == 'Darwin' and 'ABC' or '^us') then
         user_us_layout_variation = value
-    else if string.find(value, '.US$') then
+    elseif string.find(value, '.US$') then
         user_us_layout_variation = value
     end
 end
