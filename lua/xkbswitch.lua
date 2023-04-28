@@ -7,25 +7,33 @@ local user_os_name = vim.loop.os_uname().sysname
 
 -- Find the path to the xkbswitch shared object (macOS)
 if user_os_name == 'Darwin' then
-    if vim.fn.filereadable('/usr/local/lib/libInputSourceSwitcher.dylib') then xkb_switch_lib = '/usr/local/lib/libInputSourceSwitcher.dylib'
-    elseif vim.fn.filereadable('/usr/lib/libInputSourceSwitcher.dylib') then xkb_switch_lib = '/usr/lib/libInputSourceSwitcher.dylib' end
--- Find the path to the xkbswitch shared object (Linux)
+    if vim.fn.filereadable('/usr/local/lib/libInputSourceSwitcher.dylib') then
+        xkb_switch_lib = '/usr/local/lib/libInputSourceSwitcher.dylib'
+    elseif vim.fn.filereadable('/usr/lib/libInputSourceSwitcher.dylib') then
+        xkb_switch_lib = '/usr/lib/libInputSourceSwitcher.dylib'
+    end
+    -- Find the path to the xkbswitch shared object (Linux)
 else
-    local all_libs_locations = vim.fn.systemlist('ldd $(which xkb-switch)')
-    for _, value in ipairs(all_libs_locations) do
-        if string.find(value, 'libxkbswitch.so.1') then
-            if string.find(value, 'not found') then
-                xkb_switch_lib = nil
-            else
-                xkb_switch_lib = string.sub(
-                    value, string.find(value, "/"), string.find(value, "%(") - 2
-                )
+    -- g3kb-switch
+    if vim.fn.filereadable('/usr/local/lib64/libg3kbswitch.so') then
+        xkb_switch_lib = '/usr/local/lib64/libg3kbswitch.so'
+    elseif vim.fn.filereadable('/usr/local/lib/libg3kbswitch.so') then
+        xkb_switch_lib = '/usr/local/lib/libg3kbswitch.so'
+    else
+        -- xkb-switch
+        local all_libs_locations = vim.fn.systemlist('ldd $(which xkb-switch)')
+        for _, value in ipairs(all_libs_locations) do
+            if string.find(value, 'libxkbswitch.so.1') then
+                if string.find(value, 'not found') then
+                    xkb_switch_lib = nil
+                else
+                    xkb_switch_lib = string.sub(
+                        value, string.find(value, "/"), string.find(value, "%(") - 2
+                    )
+                end
             end
         end
     end
-end
-if xkb_switch_lib == nil then
-   if vim.fn.filereadable('/usr/local/lib/libg3kbswitch.so') then xkb_switch_lib = '/usr/local/lib/libg3kbswitch.so' end
 end
 
 if xkb_switch_lib == nil then
@@ -40,7 +48,8 @@ end
 local saved_layout = get_current_layout()
 local user_us_layout_variation = nil
 
-local user_layouts = vim.fn.systemlist(string.find(xkb_switch_lib, 'dylib') and 'issw -l' or string.find(xkb_switch_lib, 'xkb') and 'xkb-switch -l' or string.find(xkb_switch_lib, 'g3kb') and 'g3kb-switch -l')
+local user_layouts = vim.fn.systemlist(string.find(xkb_switch_lib, 'dylib') and 'issw -l' or
+    string.find(xkb_switch_lib, 'xkb') and 'xkb-switch -l' or string.find(xkb_switch_lib, 'g3kb') and 'g3kb-switch -l')
 -- Find the used US layout (us/us(qwerty)/us(dvorak)/...)
 for _, value in ipairs(user_layouts) do
     if string.find(value, user_os_name == 'Darwin' and 'ABC' or '^us') then
@@ -51,7 +60,8 @@ for _, value in ipairs(user_layouts) do
 end
 
 if user_us_layout_variation == nil then
-    error("(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l / issw -l / g3kb-switch -l)")
+    error(
+        "(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l / issw -l / g3kb-switch -l)")
 end
 
 function M.setup()
@@ -62,7 +72,7 @@ function M.setup()
         'InsertLeave',
         {
             pattern = "*",
-            callback = function ()
+            callback = function()
                 vim.schedule(function()
                     saved_layout = get_current_layout()
                     vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', user_us_layout_variation)
@@ -78,7 +88,7 @@ function M.setup()
         'FocusGained',
         {
             pattern = "*",
-            callback = function ()
+            callback = function()
                 vim.schedule(function()
                     saved_layout = get_current_layout()
                     local current_mode = vim.api.nvim_get_mode().mode
@@ -96,7 +106,7 @@ function M.setup()
         'InsertEnter',
         {
             pattern = "*",
-            callback = function ()
+            callback = function()
                 vim.schedule(function()
                     vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', saved_layout)
                 end)
@@ -110,7 +120,7 @@ function M.setup()
         'FocusLost',
         {
             pattern = "*",
-            callback = function ()
+            callback = function()
                 vim.schedule(function()
                     vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', saved_layout)
                 end)
