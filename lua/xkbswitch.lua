@@ -15,9 +15,9 @@ if user_os_name == 'Darwin' then
     -- Find the path to the xkbswitch shared object (Linux)
 else
     -- g3kb-switch
-    if vim.fn.filereadable('/usr/local/lib64/libg3kbswitch.so') then
+    if vim.fn.filereadable('/usr/local/lib64/libg3kbswitch.so') == 1 then
         xkb_switch_lib = '/usr/local/lib64/libg3kbswitch.so'
-    elseif vim.fn.filereadable('/usr/local/lib/libg3kbswitch.so') then
+    elseif vim.fn.filereadable('/usr/local/lib/libg3kbswitch.so') == 1 then
         xkb_switch_lib = '/usr/local/lib/libg3kbswitch.so'
     else
         -- xkb-switch
