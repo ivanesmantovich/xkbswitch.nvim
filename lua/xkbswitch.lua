@@ -7,17 +7,17 @@ local user_os_name = vim.loop.os_uname().sysname
 
 -- Find the path to the xkbswitch shared object (macOS)
 if user_os_name == 'Darwin' then
-    if vim.fn.filereadable('/usr/local/lib/libInputSourceSwitcher.dylib') then
+    if vim.fn.filereadable('/usr/local/lib/libInputSourceSwitcher.dylib') == 1 then
         xkb_switch_lib = '/usr/local/lib/libInputSourceSwitcher.dylib'
-    elseif vim.fn.filereadable('/usr/lib/libInputSourceSwitcher.dylib') then
+    elseif vim.fn.filereadable('/usr/lib/libInputSourceSwitcher.dylib') == 1 then
         xkb_switch_lib = '/usr/lib/libInputSourceSwitcher.dylib'
     end
     -- Find the path to the xkbswitch shared object (Linux)
 else
     -- g3kb-switch
-    if vim.fn.filereadable('/usr/local/lib64/libg3kbswitch.so') then
+    if vim.fn.filereadable('/usr/local/lib64/libg3kbswitch.so') == 1 then
         xkb_switch_lib = '/usr/local/lib64/libg3kbswitch.so'
-    elseif vim.fn.filereadable('/usr/local/lib/libg3kbswitch.so') then
+    elseif vim.fn.filereadable('/usr/local/lib/libg3kbswitch.so') == 1 then
         xkb_switch_lib = '/usr/local/lib/libg3kbswitch.so'
     else
         -- xkb-switch
