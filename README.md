@@ -99,16 +99,16 @@ set -g focus-events on
 ## About
 This plugin uses autocommands to 'listen' when you are entering and exiting Insert mode, or when Neovim gets or loses focus, and libcalls to change your layout.
 
-* **When leaving insert mode:**
+* **When leaving Insert Mode / Cmdline:**
 1) Save the current layout
 2) Switch to the US layout
 
-* **When entering Insert mode:**
+* **When entering Insert Mode / Cmdline:**
 1. Switch to the previously saved layout
 
 * **When Neovim gets focus:**
 1. Save the current layout
-2. Switch to the US layout if Normal mode or Visual mode is the current mode
+2. Switch to the US layout if Normal Mode or Visual Mode is the current mode
 
 * **When Neovim loses focus:**
 1. Switch to the previously saved layout
