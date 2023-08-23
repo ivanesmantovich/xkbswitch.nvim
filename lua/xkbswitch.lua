@@ -65,11 +65,11 @@ if user_us_layout_variation == nil then
 end
 
 function M.setup()
-    -- When leaving Insert Mode / Command Line:
+    -- When leaving Insert Mode:
     -- 1. Save the current layout
     -- 2. Switch to the US layout
     autocmd(
-        {'InsertLeave', 'CmdlineLeave'},
+        'InsertLeave',
         {
             pattern = "*",
             callback = function()
@@ -101,10 +101,10 @@ function M.setup()
     )
 
     -- When Neovim loses focus
-    -- When entering Insert Mode / Command Line:
+    -- When entering Insert Mode:
     -- 1. Switch to the previously saved layout
     autocmd(
-        {'FocusLost', 'InsertEnter', 'CmdlineEnter'},
+        {'FocusLost', 'InsertEnter'},
         {
             pattern = "*",
             callback = function()
