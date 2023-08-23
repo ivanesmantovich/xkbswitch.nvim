@@ -65,11 +65,11 @@ if user_us_layout_variation == nil then
 end
 
 function M.setup()
-    -- When leaving insert mode:
+    -- When leaving Insert Mode / Command Line:
     -- 1. Save the current layout
     -- 2. Switch to the US layout
     autocmd(
-        'InsertLeave',
+        {'InsertLeave', 'CmdlineLeave'},
         {
             pattern = "*",
             callback = function()
@@ -83,7 +83,7 @@ function M.setup()
 
     -- When Neovim gets focus:
     -- 1. Save the current layout
-    -- 2. Switch to the US layout if Normal mode or Visual mode is the current mode
+    -- 2. Switch to the US layout if Normal Mode or Visual Mode is the current mode
     autocmd(
         'FocusGained',
         {
@@ -100,24 +100,11 @@ function M.setup()
         }
     )
 
-    -- When entering Insert mode:
+    -- When Neovim loses focus
+    -- When entering Insert Mode / Command Line:
     -- 1. Switch to the previously saved layout
     autocmd(
-        'InsertEnter',
-        {
-            pattern = "*",
-            callback = function()
-                vim.schedule(function()
-                    vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', saved_layout)
-                end)
-            end
-        }
-    )
-
-    -- When Neovim loses focus:
-    -- 1. Switch to the previously saved layout
-    autocmd(
-        'FocusLost',
+        {'FocusLost', 'InsertEnter', 'CmdlineEnter'},
         {
             pattern = "*",
             callback = function()
