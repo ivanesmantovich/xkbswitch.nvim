@@ -85,7 +85,7 @@ function M.setup()
     -- 1. Save the current layout
     -- 2. Switch to the US layout if Normal Mode or Visual Mode is the current mode
     autocmd(
-        'FocusGained',
+        {'FocusGained', 'CmdlineLeave'},
         {
             pattern = "*",
             callback = function()
