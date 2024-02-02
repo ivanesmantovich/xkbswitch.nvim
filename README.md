@@ -27,6 +27,12 @@ sudo make install
 ```
 use 'ivanesmantovich/xkbswitch.nvim'
 ```
+* Lazy (`~/.config/nvim/lua/plugins/xkbswitch.lua`)
+```
+return { 
+    {'ivanesmantovich/xkbswitch.nvim'} 
+}
+```
 * Dein
 ```
 call dein#add('ivanesmantovich/xkbswitch.nvim')
@@ -52,6 +58,12 @@ sudo ldconfig
 * Packer
 ```
 use 'ivanesmantovich/xkbswitch.nvim'
+```
+* Lazy (`~/.config/nvim/lua/plugins/xkbswitch.lua`)
+```
+return { 
+    {'ivanesmantovich/xkbswitch.nvim'} 
+}
 ```
 * Dein
 ```
@@ -80,6 +92,12 @@ make install  # no sudo required!
 * Packer
 ```
 use 'ivanesmantovich/xkbswitch.nvim'
+```
+* Lazy (`~/.config/nvim/lua/plugins/xkbswitch.lua`)
+```
+return { 
+    {'ivanesmantovich/xkbswitch.nvim'} 
+}
 ```
 * Dein
 ```
