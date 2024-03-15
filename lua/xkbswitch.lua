@@ -1,4 +1,8 @@
 local M = {}
+
+-- Default parameters
+M.events_get_focus = {'FocusGained', 'CmdlineLeave'}
+
 -- nvim_create_autocmd shortcut
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -64,7 +68,14 @@ if user_us_layout_variation == nil then
         "(xkbswitch.lua) Error occured: could not find the English layout. Check your layout list. (xkb-switch -l / issw -l / g3kb-switch -l)")
 end
 
-function M.setup()
+function M.setup(opts)
+
+    -- Parse provided options
+    opts = opts or {}
+    if opts.events_get_focus then
+        M.events_get_focus = opts.events_get_focus
+    end
+
     -- When leaving Insert Mode:
     -- 1. Save the current layout
     -- 2. Switch to the US layout
@@ -85,7 +96,7 @@ function M.setup()
     -- 1. Save the current layout
     -- 2. Switch to the US layout if Normal Mode or Visual Mode is the current mode
     autocmd(
-        {'FocusGained', 'CmdlineLeave'},
+        M.events_get_focus,
         {
             pattern = "*",
             callback = function()
