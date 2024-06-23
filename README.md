@@ -114,6 +114,14 @@ If you use Neovim inside of Tmux add this line to your `.tmux.conf`
 set -g focus-events on
 ```
 
+## Default Options
+```lua
+require('xkbswitch').setup({
+    events_get_focus = {'FocusGained', 'CmdlineLeave'}
+    insert_focus_lost = true,
+})
+```
+
 ## About
 This plugin uses autocommands to 'listen' when you are entering and exiting Insert mode, or when Neovim gets or loses focus, and libcalls to change your layout.
 

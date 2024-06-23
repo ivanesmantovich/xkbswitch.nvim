@@ -2,6 +2,7 @@ local M = {}
 
 -- Default parameters
 M.events_get_focus = {'FocusGained', 'CmdlineLeave'}
+M.insert_focus_lost = true
 
 -- nvim_create_autocmd shortcut
 local autocmd = vim.api.nvim_create_autocmd
@@ -75,6 +76,9 @@ function M.setup(opts)
     if opts.events_get_focus then
         M.events_get_focus = opts.events_get_focus
     end
+    if opts.insert_focus_lost ~= nil then
+        M.insert_focus_lost = opts.insert_focus_lost
+    end
 
     -- When leaving Insert Mode:
     -- 1. Save the current layout
@@ -111,16 +115,37 @@ function M.setup(opts)
         }
     )
 
-    -- When Neovim loses focus
     -- When entering Insert Mode:
     -- 1. Switch to the previously saved layout
     autocmd(
-        {'FocusLost', 'InsertEnter'},
+        {'InsertEnter'},
         {
             pattern = "*",
             callback = function()
                 vim.schedule(function()
                     vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', saved_layout)
+                end)
+            end
+        }
+    )
+
+    -- When Neovim loses focus:
+    -- 1. Switch to the previously saved layout
+    --    - If insert_focus_lost is false do it only if Normal Mode or Visual Mode is the current mode
+    autocmd(
+        {'FocusLost'},
+        {
+            pattern = "*",
+            callback = function()
+                vim.schedule(function()
+                    if M.insert_focus_lost then
+                        vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', saved_layout)
+                    else
+                        local current_mode = vim.api.nvim_get_mode().mode
+                        if current_mode == "n" or current_mode == "no" or current_mode == "v" or current_mode == "V" or current_mode == "^V" then
+                            vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', saved_layout)
+                        end
+                    end
                 end)
             end
         }
