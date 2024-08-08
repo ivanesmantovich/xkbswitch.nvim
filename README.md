@@ -33,14 +33,14 @@ sudo make install
 <tr>
 <td>
 
-```
+```lua
 use 'ivanesmantovich/xkbswitch.nvim'
 ```
 
 </td>
 <td>
 
-```
+```lua
 return { 
     {'ivanesmantovich/xkbswitch.nvim'} 
 }
@@ -49,7 +49,7 @@ return {
 </td>
 <td>
 
-```
+```lua
 call dein#add('ivanesmantovich/xkbswitch.nvim')
 ```
 
@@ -58,7 +58,7 @@ call dein#add('ivanesmantovich/xkbswitch.nvim')
 </table>
 
 3. Add the setup line to your config
-```
+```lua
 require('xkbswitch').setup()
 ```
 
@@ -84,14 +84,14 @@ sudo ldconfig
 <tr>
 <td>
 
-```
+```lua
 use 'ivanesmantovich/xkbswitch.nvim'
 ```
 
 </td>
 <td>
 
-```
+```lua
 return { 
     {'ivanesmantovich/xkbswitch.nvim'} 
 }
@@ -100,7 +100,7 @@ return {
 </td>
 <td>
 
-```
+```lua
 call dein#add('ivanesmantovich/xkbswitch.nvim')
 ```
 
@@ -109,7 +109,7 @@ call dein#add('ivanesmantovich/xkbswitch.nvim')
 </table>
 
 4. Add the setup line to your config
-```
+```lua
 require('xkbswitch').setup()
 ```
 
@@ -137,14 +137,14 @@ make install  # no sudo required!
 <tr>
 <td>
 
-```
+```lua
 use 'ivanesmantovich/xkbswitch.nvim'
 ```
 
 </td>
 <td>
 
-```
+```lua
 return { 
     {'ivanesmantovich/xkbswitch.nvim'} 
 }
@@ -153,7 +153,7 @@ return {
 </td>
 <td>
 
-```
+```lua
 call dein#add('ivanesmantovich/xkbswitch.nvim')
 ```
 
@@ -162,13 +162,13 @@ call dein#add('ivanesmantovich/xkbswitch.nvim')
 </table>
 
 4. Add the setup line to your config
-```
+```lua
 require('xkbswitch').setup()
 ```
 
 ## With Tmux
 If you use Neovim inside of Tmux add this line to your `.tmux.conf`
-```
+```tmux
 set -g focus-events on
 ```
 
