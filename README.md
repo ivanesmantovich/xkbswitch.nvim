@@ -22,21 +22,41 @@ cmake ..
 make
 sudo make install
 ```
+
 2. Install this plugin
-* Packer
+<table>
+<tr>
+  <th> Packer </th>
+  <th> Lazy (~/.config/nvim/lua/plugins/xkbswitch.lua) </th>
+  <th> Dein </th>
+</tr>
+<tr>
+<td>
+
 ```
 use 'ivanesmantovich/xkbswitch.nvim'
 ```
-* Lazy (`~/.config/nvim/lua/plugins/xkbswitch.lua`)
+
+</td>
+<td>
+
 ```
 return { 
     {'ivanesmantovich/xkbswitch.nvim'} 
 }
 ```
-* Dein
+
+</td>
+<td>
+
 ```
 call dein#add('ivanesmantovich/xkbswitch.nvim')
 ```
+
+</td>
+</tr>
+</table>
+
 3. Add the setup line to your config
 ```
 require('xkbswitch').setup()
@@ -55,20 +75,39 @@ sudo make install
 sudo ldconfig
 ```
 3. Install this plugin
-* Packer
+<table>
+<tr>
+  <th> Packer </th>
+  <th> Lazy (~/.config/nvim/lua/plugins/xkbswitch.lua) </th>
+  <th> Dein </th>
+</tr>
+<tr>
+<td>
+
 ```
 use 'ivanesmantovich/xkbswitch.nvim'
 ```
-* Lazy (`~/.config/nvim/lua/plugins/xkbswitch.lua`)
+
+</td>
+<td>
+
 ```
 return { 
     {'ivanesmantovich/xkbswitch.nvim'} 
 }
 ```
-* Dein
+
+</td>
+<td>
+
 ```
 call dein#add('ivanesmantovich/xkbswitch.nvim')
 ```
+
+</td>
+</tr>
+</table>
+
 4. Add the setup line to your config
 ```
 require('xkbswitch').setup()
@@ -89,20 +128,39 @@ cd ../extension
 make install  # no sudo required!
 ```
 3. Install this plugin
-* Packer
+<table>
+<tr>
+  <th> Packer </th>
+  <th> Lazy (~/.config/nvim/lua/plugins/xkbswitch.lua) </th>
+  <th> Dein </th>
+</tr>
+<tr>
+<td>
+
 ```
 use 'ivanesmantovich/xkbswitch.nvim'
 ```
-* Lazy (`~/.config/nvim/lua/plugins/xkbswitch.lua`)
+
+</td>
+<td>
+
 ```
 return { 
     {'ivanesmantovich/xkbswitch.nvim'} 
 }
 ```
-* Dein
+
+</td>
+<td>
+
 ```
 call dein#add('ivanesmantovich/xkbswitch.nvim')
 ```
+
+</td>
+</tr>
+</table>
+
 4. Add the setup line to your config
 ```
 require('xkbswitch').setup()
